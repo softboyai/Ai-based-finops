@@ -1,0 +1,133 @@
+<?php
+require_once __DIR__ . '/../config/db.php';
+requireRole(['admin', 'management']);
+$pageTitle = 'AI Risk Alerts';
+
+// Handle mark as reviewed
+if (isset($_GET['review']) && $_SESSION['role'] === 'admin') {
+    $id = (int)$_GET['review'];
+    $pdo->prepare("UPDATE risk_alerts SET reviewed = 1 WHERE id = ?")->execute([$id]);
+    header('Location: ' . BASE_URL . '/ai/risk_alerts.php');
+    exit;
+}
+
+// Filters
+$filterScore = $_GET['score'] ?? '';
+$filterStatus = $_GET['status'] ?? '';
+
+$where = "1=1";
+$params = [];
+
+if ($filterScore) {
+    $where .= " AND ra.risk_score = ?";
+    $params[] = $filterScore;
+}
+if ($filterStatus === 'pending') {
+    $where .= " AND ra.reviewed = 0";
+} elseif ($filterStatus === 'reviewed') {
+    $where .= " AND ra.reviewed = 1";
+}
+
+$stmt = $pdo->prepare("SELECT ra.*, c.name as customer_name, c.account_number, t.amount, t.type as transaction_type
+                        FROM risk_alerts ra 
+                        JOIN customers c ON ra.customer_id = c.id 
+                        JOIN transactions t ON ra.transaction_id = t.id
+                        WHERE $where
+                        ORDER BY ra.flagged_at DESC");
+$stmt->execute($params);
+$alerts = $stmt->fetchAll();
+
+// Stats
+$totalAlerts = $pdo->query("SELECT COUNT(*) FROM risk_alerts")->fetchColumn();
+$highAlerts = $pdo->query("SELECT COUNT(*) FROM risk_alerts WHERE risk_score = 'High' AND reviewed = 0")->fetchColumn();
+$mediumAlerts = $pdo->query("SELECT COUNT(*) FROM risk_alerts WHERE risk_score = 'Medium' AND reviewed = 0")->fetchColumn();
+$pendingReview = $pdo->query("SELECT COUNT(*) FROM risk_alerts WHERE reviewed = 0")->fetchColumn();
+
+include __DIR__ . '/../includes/header.php';
+?>
+
+<div class="stats-grid">
+    <div class="stat-card danger">
+        <h3>High Risk (Pending)</h3>
+        <div class="value"><?= $highAlerts ?></div>
+    </div>
+    <div class="stat-card warning">
+        <h3>Medium Risk (Pending)</h3>
+        <div class="value"><?= $mediumAlerts ?></div>
+    </div>
+    <div class="stat-card">
+        <h3>Total Alerts</h3>
+        <div class="value"><?= $totalAlerts ?></div>
+    </div>
+    <div class="stat-card info">
+        <h3>Pending Review</h3>
+        <div class="value"><?= $pendingReview ?></div>
+    </div>
+</div>
+
+<div class="table-container">
+    <div class="table-header">
+        <h3>Flagged Transactions</h3>
+        <a href="<?= BASE_URL ?>/reports/download.php?report=risk_alerts" target="_blank" class="btn btn-sm btn-danger">📥 Download PDF</a>
+    </div>
+    <div style="padding:15px 20px;border-bottom:1px solid var(--border);display:flex;gap:10px;flex-wrap:wrap;">
+        <form method="GET" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+            <select name="score" style="padding:8px 12px;border:1px solid var(--border);border-radius:4px;">
+                <option value="">All Risk Levels</option>
+                <option value="High" <?= $filterScore === 'High' ? 'selected' : '' ?>>High</option>
+                <option value="Medium" <?= $filterScore === 'Medium' ? 'selected' : '' ?>>Medium</option>
+                <option value="Low" <?= $filterScore === 'Low' ? 'selected' : '' ?>>Low</option>
+            </select>
+            <select name="status" style="padding:8px 12px;border:1px solid var(--border);border-radius:4px;">
+                <option value="">All Status</option>
+                <option value="pending" <?= $filterStatus === 'pending' ? 'selected' : '' ?>>Pending</option>
+                <option value="reviewed" <?= $filterStatus === 'reviewed' ? 'selected' : '' ?>>Reviewed</option>
+            </select>
+            <button type="submit" class="btn btn-sm btn-primary">Filter</button>
+            <a href="<?= BASE_URL ?>/ai/risk_alerts.php" class="btn btn-sm btn-warning">Clear</a>
+        </form>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Customer</th>
+                <th>Transaction</th>
+                <th>Amount</th>
+                <th>Flag Reason</th>
+                <th>Risk Level</th>
+                <th>Status</th>
+                <?php if ($_SESSION['role'] === 'admin'): ?>
+                <th>Action</th>
+                <?php endif; ?>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($alerts as $alert): ?>
+            <tr class="risk-<?= strtolower($alert['risk_score']) ?>">
+                <td><?= formatDateTime($alert['flagged_at']) ?></td>
+                <td><?= sanitize($alert['customer_name']) ?> (<?= sanitize($alert['account_number']) ?>)</td>
+                <td><?= ucfirst(str_replace('_', ' ', $alert['transaction_type'])) ?></td>
+                <td><?= formatCurrency($alert['amount']) ?></td>
+                <td><?= sanitize($alert['flag_reason']) ?></td>
+                <td><span class="badge badge-<?= strtolower($alert['risk_score']) ?>"><?= $alert['risk_score'] ?></span></td>
+                <td><?= $alert['reviewed'] ? 'Reviewed' : '<strong>Pending</strong>' ?></td>
+                <?php if ($_SESSION['role'] === 'admin'): ?>
+                <td>
+                    <?php if (!$alert['reviewed']): ?>
+                    <a href="?review=<?= $alert['id'] ?>" class="btn btn-sm btn-success" onclick="return confirm('Mark as reviewed?')">Review</a>
+                    <?php else: ?>
+                    <span style="color:var(--gray);">Done</span>
+                    <?php endif; ?>
+                </td>
+                <?php endif; ?>
+            </tr>
+            <?php endforeach; ?>
+            <?php if (empty($alerts)): ?>
+            <tr><td colspan="<?= $_SESSION['role'] === 'admin' ? '8' : '7' ?>" style="text-align:center;color:var(--gray);">No risk alerts found</td></tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
+</div>
+
+<?php include __DIR__ . '/../includes/footer.php'; ?>
