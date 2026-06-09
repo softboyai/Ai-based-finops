@@ -50,9 +50,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Run AI risk analysis
                 $flags = analyzeTransaction($pdo, $transactionId);
 
-                $message = 'Transaction recorded successfully.';
+                $message = '✅ Transaction recorded successfully.';
                 if (!empty($flags)) {
-                    $message .= ' <strong>AI Alert:</strong> ' . count($flags) . ' risk flag(s) detected.';
+                    $message .= '<br><br><strong>🤖 AI RISK ENGINE ALERT:</strong><br>';
+                    foreach ($flags as $f) {
+                        $color = $f['severity'] === 'High' ? '#dc3545' : '#fd7e14';
+                        $message .= '<span style="color:' . $color . ';font-weight:600;">⚠ [' . $f['severity'] . '] ' . $f['reason'] . '</span><br>';
+                    }
+                    $message .= '<br><small style="color:var(--gray);">AI Engine automatically analyzed this transaction and generated ' . count($flags) . ' risk flag(s). View details in <a href="' . BASE_URL . '/ai/risk_alerts.php">Risk Alerts</a>.</small>';
+                } else {
+                    $message .= '<br><small style="color:var(--gray);">🤖 AI Engine: No anomalies detected. Transaction is within normal parameters.</small>';
                 }
             } catch (Exception $e) {
                 $pdo->rollBack();
@@ -74,6 +81,11 @@ include __DIR__ . '/../includes/header.php';
 
 <div class="form-container">
     <h3>Record New Transaction</h3>
+
+    <!-- AI Notice -->
+    <div style="background:linear-gradient(135deg, #001a33, #003366);color:#fff;padding:12px 18px;border-radius:6px;margin-bottom:20px;font-size:0.85rem;">
+        🤖 <strong>AI Risk Engine Active</strong> — Every transaction is automatically analyzed by the Goshen Finance AI for anomalies, frequency patterns, and balance thresholds.
+    </div>
 
     <?php if (empty($customers)): ?>
     <div class="alert alert-warning">

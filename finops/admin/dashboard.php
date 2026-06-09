@@ -29,16 +29,17 @@ include __DIR__ . '/../includes/header.php';
 
 <!-- Goshen Finance Welcome Card -->
 <div class="chart-container" style="border-left:4px solid var(--primary);margin-bottom:25px;">
-    <h3 style="margin-bottom:10px;">Welcome to Goshen Finance Plc — FinOps Dashboard</h3>
+    <h3 style="margin-bottom:10px;">Welcome to Goshen Finance Plc — AI-Powered FinOps Dashboard</h3>
     <p style="color:var(--gray);font-size:0.9rem;line-height:1.7;">
         <strong>Goshen Finance Plc</strong> was established in <strong>2005</strong> and is authorized by <strong>MINICOM</strong> (Ministry of Trade and Industry) 
-        to provide financial services in Rwanda. Our core services include savings accounts, loan management, 
-        investment products, and current accounts. This AI-powered FinOps Management Information System 
-        supports intelligent risk detection, financial reporting, and operational efficiency for all departments.
+        to provide financial services in Rwanda. This system uses <strong>Artificial Intelligence</strong> to automatically detect 
+        fraudulent transactions, predict loan defaults, and provide real-time financial insights.
     </p>
-    <p style="color:var(--gray);font-size:0.85rem;margin-top:8px;">
-        📍 Kigali, Rwanda &nbsp;|&nbsp; 📧 info@goshenfinance.rw &nbsp;|&nbsp; 📞 +250 788 000 000
-    </p>
+    <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;">
+        <span style="background:#003366;color:#fff;padding:4px 12px;border-radius:4px;font-size:0.75rem;font-weight:600;">🤖 AI Risk Detection: ACTIVE</span>
+        <span style="background:#28a745;color:#fff;padding:4px 12px;border-radius:4px;font-size:0.75rem;font-weight:600;">📊 AI Trend Analysis: ACTIVE</span>
+        <span style="background:#dc3545;color:#fff;padding:4px 12px;border-radius:4px;font-size:0.75rem;font-weight:600;">⚠️ AI Loan Default Prediction: ACTIVE</span>
+    </div>
 </div>
 
 <div class="stats-grid">

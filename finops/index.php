@@ -203,7 +203,7 @@ if (isset($_SESSION['user_id'])) {
             <p class="description">
                 An intelligent financial operations platform powered by AI-driven risk detection and analytics.
                 Goshen Finance Plc leverages machine-learning-inspired algorithms to monitor transactions,
-                detect anomalies, assess loan default risks, and generate actionable financial insights —
+                detect anomalies, assess loan default risks, and generate actionable financial insights -
                 all built to serve our customers in Rwanda with excellence and security.
             </p>
 

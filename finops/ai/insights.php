@@ -33,6 +33,44 @@ include __DIR__ . '/../includes/header.php';
     </div>
 </div>
 
+<!-- AI Algorithms Status Panel -->
+<div class="chart-container" style="margin-bottom:20px;background:linear-gradient(135deg, #001a33 0%, #003366 100%);color:#fff;border:none;">
+    <h3 style="color:#fff;margin-bottom:15px;">🧠 AI Engine Status — Active Algorithms</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:15px;">
+        <div style="background:rgba(255,255,255,0.1);border-radius:8px;padding:15px;border:1px solid rgba(255,255,255,0.15);">
+            <strong style="color:#4fc3f7;">Algorithm 1: Anomaly Detection</strong>
+            <p style="font-size:0.8rem;opacity:0.8;margin-top:5px;">Flags transactions exceeding 3× the customer's historical average amount. Detects unusual large deposits or withdrawals.</p>
+            <span style="background:#dc3545;padding:2px 8px;border-radius:3px;font-size:0.7rem;font-weight:700;">RISK: HIGH</span>
+        </div>
+        <div style="background:rgba(255,255,255,0.1);border-radius:8px;padding:15px;border:1px solid rgba(255,255,255,0.15);">
+            <strong style="color:#4fc3f7;">Algorithm 2: Frequency Analysis</strong>
+            <p style="font-size:0.8rem;opacity:0.8;margin-top:5px;">Detects 3+ transactions from the same account within a 1-hour window. Identifies rapid-fire suspicious activity.</p>
+            <span style="background:#fd7e14;padding:2px 8px;border-radius:3px;font-size:0.7rem;font-weight:700;">RISK: MEDIUM</span>
+        </div>
+        <div style="background:rgba(255,255,255,0.1);border-radius:8px;padding:15px;border:1px solid rgba(255,255,255,0.15);">
+            <strong style="color:#4fc3f7;">Algorithm 3: Balance Threshold</strong>
+            <p style="font-size:0.8rem;opacity:0.8;margin-top:5px;">Monitors if account balance drops below 10% of the opening balance. Identifies accounts at financial risk.</p>
+            <span style="background:#dc3545;padding:2px 8px;border-radius:3px;font-size:0.7rem;font-weight:700;">RISK: HIGH</span>
+        </div>
+        <div style="background:rgba(255,255,255,0.1);border-radius:8px;padding:15px;border:1px solid rgba(255,255,255,0.15);">
+            <strong style="color:#4fc3f7;">Algorithm 4: Loan Default Prediction</strong>
+            <p style="font-size:0.8rem;opacity:0.8;margin-top:5px;">Identifies customers with 2+ missed loan repayments. Predicts high probability of loan default.</p>
+            <span style="background:#dc3545;padding:2px 8px;border-radius:3px;font-size:0.7rem;font-weight:700;">PREDICTION: DEFAULT</span>
+        </div>
+        <div style="background:rgba(255,255,255,0.1);border-radius:8px;padding:15px;border:1px solid rgba(255,255,255,0.15);">
+            <strong style="color:#4fc3f7;">Algorithm 5: Trend Analysis</strong>
+            <p style="font-size:0.8rem;opacity:0.8;margin-top:5px;">Compares monthly transaction volumes to detect growth or decline patterns. Calculates % change for forecasting.</p>
+            <span style="background:#17a2b8;padding:2px 8px;border-radius:3px;font-size:0.7rem;font-weight:700;">ANALYSIS</span>
+        </div>
+        <div style="background:rgba(255,255,255,0.1);border-radius:8px;padding:15px;border:1px solid rgba(255,255,255,0.15);">
+            <strong style="color:#4fc3f7;">Algorithm 6: Risk Scoring</strong>
+            <p style="font-size:0.8rem;opacity:0.8;margin-top:5px;">Accumulates weighted scores per customer (High=3, Medium=2, Low=1). Ranks top 5 riskiest accounts.</p>
+            <span style="background:#ffc107;color:#333;padding:2px 8px;border-radius:3px;font-size:0.7rem;font-weight:700;">SCORING</span>
+        </div>
+    </div>
+    <p style="margin-top:15px;font-size:0.75rem;opacity:0.6;">AI Engine runs automatically after every transaction. No manual intervention required. Last analysis: <?= formatDateTime(date('Y-m-d H:i:s')) ?></p>
+</div>
+
 <div class="stats-grid">
     <div class="stat-card <?= $trend['change_percent'] >= 0 ? 'success' : 'danger' ?>">
         <h3>Monthly Trend</h3>
