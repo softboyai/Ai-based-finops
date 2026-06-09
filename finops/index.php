@@ -1,12 +1,15 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_set_cookie_params(['path' => '/']);
+    session_start();
+}
 
 // Auto-detect base path
 $scriptDir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME']));
 $base = $scriptDir;
 
 // If logged in, redirect to dashboard
-if (isset($_SESSION['user_id'])) {
+if (isset($_SESSION['user_id']) && isset($_SESSION['role'])) {
     switch ($_SESSION['role']) {
         case 'admin': header("Location: $base/admin/dashboard.php"); break;
         case 'finance_officer': header("Location: $base/finance/dashboard.php"); break;

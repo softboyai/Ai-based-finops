@@ -92,6 +92,8 @@ C:\xampp\htdocs\AI-Based FinOps\finops\
 ### Step 5: Login
 Go to: `http://localhost/AI-Based%20FinOps/finops/`
 
+**IMPORTANT:** If you get a "too many redirects" error, clear your browser cookies for localhost first (`Ctrl+Shift+Delete` → Cookies), or open an Incognito window.
+
 **Login credentials:**
 
 | Username | Password | Role |
@@ -343,10 +345,13 @@ finops/
 |---------|----------|
 | MySQL won't start | Close other MySQL instances, or change port in `my.ini` |
 | "Column not found: email" | Run install.php again — it adds the missing column |
-| Logo not showing | Paths use BASE_URL now, should auto-detect. Clear browser cache. |
+| Logo not showing | Clear browser cache. Paths auto-detect via BASE_URL. |
 | Charts empty | Run seed.php to populate data |
 | AI alerts empty | Process transactions or run seed.php — AI only flags after transactions exist |
 | Page not found | Make sure URL uses: `http://localhost/AI-Based%20FinOps/finops/` |
+| "Too many redirects" | Clear cookies for localhost (`Ctrl+Shift+Delete`) or use Incognito |
+| "Undefined array key role" | Clear cookies — old session data conflict. Incognito fixes it. |
+| Login doesn't work | Clear cookies first, then login. Password for admin is `admin123` |
 
 ---
 

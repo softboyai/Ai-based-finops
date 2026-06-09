@@ -513,15 +513,92 @@ The system demonstrates that AI can be effectively implemented in financial syst
 | mcmukamana | officer123 | Finance Officer |
 | phabimana | manage123 | Management Staff |
 
-### Appendix B: Database Schema (SQL)
+### Appendix B: Troubleshooting
+
+| Problem | Solution |
+|---------|----------|
+| MySQL won't start in XAMPP | Close other MySQL/MariaDB instances or change port in my.ini |
+| "Column not found: email" | Run install.php again — it adds the email column |
+| "Too many redirects" | Clear browser cookies for localhost or use Incognito window |
+| "Undefined array key role" | Same as above — clear cookies to remove stale session |
+| Logo not showing | Clear browser cache (Ctrl+F5). Paths auto-detect. |
+| Charts are empty | Run seed.php first to populate sample data |
+| AI alerts page is empty | AI only generates alerts after transactions. Run seed.php. |
+| Login doesn't redirect | Clear cookies, then use admin/admin123 |
+
+### Appendix C: Presentation Slide Outline
+
+**Slide 1 — Title**
+- AI-Based FinOps Management Information System
+- Goshen Finance Plc | Kigali, Rwanda
+- Established 2005 | Authorized by MINICOM
+
+**Slide 2 — Problem Statement**
+- Manual fraud detection (too late)
+- Loan defaults not predicted
+- No real-time insights for management
+- Paper-based reports (slow, error-prone)
+
+**Slide 3 — Solution**
+- Web-based MIS with built-in AI
+- Automated risk detection after every transaction
+- Predictive loan default analysis
+- Real-time dashboards for all roles
+
+**Slide 4 — System Architecture**
+- 3-Tier: Browser → PHP → MySQL
+- AI Engine sits in application layer
+- Chart.js for visualization
+- Role-based access (Admin, Finance Officer, Management)
+
+**Slide 5 — AI Algorithms (KEY SLIDE)**
+- Algorithm 1: Anomaly Detection (amount > 3x average → HIGH)
+- Algorithm 2: Frequency Analysis (3+ transactions/hour → MEDIUM)
+- Algorithm 3: Balance Threshold (balance < 10% opening → HIGH)
+- Algorithm 4: Loan Default Prediction (2+ missed → HIGH DEFAULT)
+- Algorithm 5: Trend Analysis (month-over-month % change)
+- Algorithm 6: Risk Scoring (weighted accumulation per customer)
+
+**Slide 6 — Live Demo**
+- Show homepage → Login → Admin Dashboard
+- AI Insights page (dark algorithm panel)
+- Process a transaction → show AI alert appearing
+- Risk Alerts page with color-coded flags
+- Download PDF report with AI badge
+
+**Slide 7 — Role Demonstrations**
+- Admin: full control, review alerts
+- Finance Officer: process payments, generate reports
+- Management: performance monitor, KPIs
+
+**Slide 8 — Technology Stack**
+- PHP (no framework), MySQL, HTML/CSS/JS, Chart.js
+- Runs on XAMPP — lightweight, no special setup
+- AI in pure PHP — no Python/ML dependencies
+
+**Slide 9 — Results**
+- 6 AI algorithms running automatically
+- Real-time risk detection (sub-second)
+- PDF reports with institutional branding
+- 29 PHP files, 6000+ lines of code
+- All 15 test cases passed
+
+**Slide 10 — Conclusion**
+- AI successfully integrated into financial MIS
+- Detects anomalies humans would miss
+- Predicts defaults before they happen
+- Lightweight deployment (standard PHP hosting)
+- Future: SMS alerts, ML models, mobile app
+
+### Appendix D: Database Schema (SQL)
 
 See file: `config/schema.sql`
 
-### Appendix C: AI Risk Engine Source Code
+### Appendix E: AI Risk Engine Source Code
 
 See file: `ai/risk_engine.php`
 
-### Appendix D: Color Scheme
+### Appendix F: Color Scheme
 
 | Element | Color Code | Usage |
 |---------|-----------|-------|

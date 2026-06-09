@@ -12,7 +12,11 @@ try {
     die("Database connection failed: " . $e->getMessage());
 }
 
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    // Set cookie path to root so session works across all subdirectories
+    session_set_cookie_params(['path' => '/']);
+    session_start();
+}
 
 // Auto-detect the base URL path so links work regardless of folder name
 function getBasePath() {
@@ -24,7 +28,9 @@ function getBasePath() {
     return $scriptDir;
 }
 
-define('BASE_URL', getBasePath());
+if (!defined('BASE_URL')) {
+    define('BASE_URL', getBasePath());
+}
 
 function isLoggedIn() {
     return isset($_SESSION['user_id']);
@@ -32,15 +38,23 @@ function isLoggedIn() {
 
 function requireLogin() {
     if (!isLoggedIn()) {
-        header('Location: ' . BASE_URL . '/auth/login.php');
+        $loginUrl = BASE_URL . '/auth/login.php';
+        $currentScript = str_replace('\\', '/', $_SERVER['SCRIPT_NAME']);
+        // Prevent redirect loop: don't redirect if we're already on login page
+        if (strpos($currentScript, '/auth/login.php') !== false) {
+            return;
+        }
+        header('Location: ' . $loginUrl);
         exit;
     }
 }
 
 function requireRole($roles) {
     requireLogin();
+    if (!isLoggedIn()) return; // Already on login page
     if (!in_array($_SESSION['role'], (array)$roles)) {
-        header('Location: ' . BASE_URL . '/auth/login.php');
+        $loginUrl = BASE_URL . '/auth/login.php';
+        header('Location: ' . $loginUrl);
         exit;
     }
 }
